@@ -1,0 +1,17 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN dpkg --add-architecture i386 && \
+    apt update && \
+    apt install -y \
+      wine32 winetricks libgl1:i386 libasound2 libpulse0:i386 \
+      ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /root/.wine && \
+    winetricks -q directplay && \
+    touch /root/.wine/.directplay_installed
+
+# No uses ENTRYPOINT, solo CMD
+CMD ["/bin/bash"]
